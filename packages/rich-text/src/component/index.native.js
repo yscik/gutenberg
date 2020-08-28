@@ -84,7 +84,6 @@ export class RichText extends Component {
 		this.onKeyDown = this.onKeyDown.bind( this );
 		this.handleEnter = this.handleEnter.bind( this );
 		this.handleDelete = this.handleDelete.bind( this );
-		this.handleMention = this.handleMention.bind( this );
 		this.onPaste = this.onPaste.bind( this );
 		this.onFocus = this.onFocus.bind( this );
 		this.onBlur = this.onBlur.bind( this );
@@ -102,7 +101,9 @@ export class RichText extends Component {
 		);
 		this.valueToFormat = this.valueToFormat.bind( this );
 		this.getHtmlToRender = this.getHtmlToRender.bind( this );
+		this.showCrossPost = this.showCrossPost.bind( this );
 		this.showMention = this.showMention.bind( this );
+		this.triggerKeyCodeHandlers = this.triggerKeyCodeHandlers.bind( this );
 		this.insertString = this.insertString.bind( this );
 		this.state = {
 			activeFormats: [],
@@ -308,7 +309,7 @@ export class RichText extends Component {
 
 		this.handleDelete( event );
 		this.handleEnter( event );
-		this.handleMention( event );
+		this.handleTriggerKeyCodes( event );
 	}
 
 	handleEnter( event ) {
@@ -387,24 +388,46 @@ export class RichText extends Component {
 		this.lastAztecEventType = 'input';
 	}
 
-	handleMention( event ) {
-		const { keyCode } = event;
+	handleTriggerKeyCodes( event ) {
+		const keyCodeHandlers = this.triggerKeyCodeHandlers();
 
-		if ( keyCode !== '@'.charCodeAt( 0 ) ) {
-			return;
+		const { keyCode } = event;
+		const triggeredKeyCodeChar = Object.keys( keyCodeHandlers ).find(
+			( charKey ) => charKey.charCodeAt( 0 ) === keyCode
+		);
+
+		if ( triggeredKeyCodeChar ) {
+			const record = this.getRecord();
+			const text = getTextContent( record );
+			// Only respond to the trigger if the selection is on the start of text or the character before is a space
+			const useTrigger =
+				text.length === 0 ||
+				record.start === 0 ||
+				text.charAt( record.start - 1 ) === ' ';
+
+			if ( useTrigger ) {
+				keyCodeHandlers[ triggeredKeyCodeChar ]();
+			} else {
+				this.insertString( record, triggeredKeyCodeChar );
+			}
 		}
-		const record = this.getRecord();
-		const text = getTextContent( record );
-		// Only start the mention UI if the selection is on the start of text or the character before is a space
-		if (
-			text.length === 0 ||
-			record.start === 0 ||
-			text.charAt( record.start - 1 ) === ' '
-		) {
-			this.showMention();
-		} else {
-			this.insertString( record, '@' );
+	}
+
+	triggerKeyCodeHandlers() {
+		if ( this.props.disableEditingMenu ) {
+			return {};
 		}
+
+		return {
+			'+': this.showCrossPost,
+			...( isMentionsSupported( this.props.capabilities ) && {
+				'@': this.showMention,
+			} ),
+		};
+	}
+
+	showCrossPost() {
+		// TODO
 	}
 
 	showMention() {
@@ -852,12 +875,9 @@ export class RichText extends Component {
 					onFocus={ this.onFocus }
 					onBlur={ this.onBlur }
 					onKeyDown={ this.onKeyDown }
-					triggerKeyCodes={
-						disableEditingMenu === false &&
-						isMentionsSupported( capabilities )
-							? [ '@' ]
-							: []
-					}
+					triggerKeyCodes={ Object.keys(
+						this.triggerKeyCodeHandlers()
+					) }
 					onPaste={ this.onPaste }
 					activeFormats={ this.getActiveFormatNames( record ) }
 					onContentSizeChange={ this.onContentSizeChange }
