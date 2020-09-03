@@ -7,7 +7,7 @@ import classnames from 'classnames';
  * WordPress dependencies
  */
 import { useSelect } from '@wordpress/data';
-import { forwardRef } from '@wordpress/element';
+import { forwardRef, useMemo } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -70,10 +70,12 @@ const BlockNavigationBlockContents = forwardRef(
 			}
 		);
 
+		const clientIds = useMemo( () => [ clientId ], [ clientId ] );
+
 		return (
 			<BlockDraggable
-				clientIds={ [ block.clientId ] }
-				elementId={ `block-navigation-block-${ block.clientId }` }
+				clientIds={ clientIds }
+				elementId={ `block-navigation-block-${ clientId }` }
 			>
 				{ ( { isDraggable, onDraggableStart, onDraggableEnd } ) => (
 					<BlockNavigationBlockSelectButton
