@@ -12,7 +12,10 @@ import { forwardRef, useMemo } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { useBlockNavigationContext } from './context';
+import {
+	useBlockNavigationFeaturesContext,
+	useBlockNavigationDropTargetContext,
+} from './context';
 import BlockNavigationBlockSelectButton from './block-select-button';
 import BlockDraggable from '../block-draggable';
 
@@ -29,13 +32,7 @@ const BlockNavigationBlockContents = forwardRef(
 		},
 		ref
 	) => {
-		const {
-			__experimentalFeatures,
-			blockDropTarget = {},
-		} = useBlockNavigationContext();
-
 		const { clientId } = block;
-
 		const rootClientId = useSelect(
 			( select ) =>
 				select( 'core/block-editor' ).getBlockRootClientId(
@@ -43,12 +40,13 @@ const BlockNavigationBlockContents = forwardRef(
 				) || '',
 			[ clientId ]
 		);
-
+		const __experimentalFeatures = useBlockNavigationFeaturesContext();
+		const blockDropTarget = useBlockNavigationDropTargetContext();
 		const {
 			rootClientId: dropTargetRootClientId,
 			clientId: dropTargetClientId,
 			dropPosition,
-		} = blockDropTarget;
+		} = blockDropTarget || {};
 
 		const isDroppingBefore =
 			dropTargetRootClientId === rootClientId &&
