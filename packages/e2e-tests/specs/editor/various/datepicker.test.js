@@ -1,7 +1,10 @@
 /**
  * WordPress dependencies
  */
-import { clickButton, createNewPost } from '@wordpress/e2e-test-utils';
+import {
+	createNewPost,
+	findSidebarPanelToggleButtonWithTitle,
+} from '@wordpress/e2e-test-utils';
 
 describe( 'Datepicker', () => {
 	beforeEach( async () => {
@@ -9,8 +12,11 @@ describe( 'Datepicker', () => {
 	} );
 
 	it( 'should show the publishing date as "Immediately" if the date is not altered', async () => {
-		const publishDate = await page.$eval(
-			'.edit-post-post-schedule__current-value',
+		const panelToggle = await findSidebarPanelToggleButtonWithTitle(
+			'Publish:'
+		);
+		const publishDate = await panelToggle.$eval(
+			'.editor-post-publish-panel__link',
 			( publishDateSpan ) => publishDateSpan.textContent
 		);
 
@@ -19,17 +25,20 @@ describe( 'Datepicker', () => {
 
 	it( 'should show the publishing date if the date is in the past', async () => {
 		// Open the datepicker.
-		await clickButton( 'Edit publish date' );
+		const panelToggle = await findSidebarPanelToggleButtonWithTitle(
+			'Publish:'
+		);
+		await panelToggle.click();
 
 		// Change the publishing date to a year in the past.
 		await page.click( '.components-datetime__time-field-year' );
 		await page.keyboard.press( 'ArrowDown' );
 
 		// Close the datepicker.
-		await clickButton( 'Edit publish date' );
+		await panelToggle.click();
 
-		const publishDate = await page.$eval(
-			'.edit-post-post-schedule__current-value',
+		const publishDate = await panelToggle.$eval(
+			'.editor-post-publish-panel__link',
 			( publishDateSpan ) => publishDateSpan.textContent
 		);
 
@@ -40,17 +49,20 @@ describe( 'Datepicker', () => {
 
 	it( 'should show the publishing date if the date is in the future', async () => {
 		// Open the datepicker.
-		await clickButton( 'Edit publish date' );
+		const panelToggle = await findSidebarPanelToggleButtonWithTitle(
+			'Publish:'
+		);
+		await panelToggle.click();
 
 		// Change the publishing date to a year in the future.
 		await page.click( '.components-datetime__time-field-year' );
 		await page.keyboard.press( 'ArrowUp' );
 
 		// Close the datepicker.
-		await clickButton( 'Edit publish date' );
+		await panelToggle.click();
 
-		const publishDate = await page.$eval(
-			'.edit-post-post-schedule__current-value',
+		const publishDate = await panelToggle.$eval(
+			'.editor-post-publish-panel__link',
 			( publishDateSpan ) => publishDateSpan.textContent
 		);
 
@@ -63,23 +75,26 @@ describe( 'Datepicker', () => {
 
 	it( 'should show the publishing date as "Immediately" if the date is cleared', async () => {
 		// Open the datepicker.
-		await clickButton( 'Edit publish date' );
+		const panelToggle = await findSidebarPanelToggleButtonWithTitle(
+			'Publish:'
+		);
+		await panelToggle.click();
 
 		// Change the publishing date to a year in the future.
 		await page.click( '.components-datetime__time-field-year' );
 		await page.keyboard.press( 'ArrowUp' );
 
 		// Close the datepicker.
-		await clickButton( 'Edit publish date' );
+		await panelToggle.click();
 
 		// Open the datepicker.
-		await clickButton( 'Edit publish date' );
+		await panelToggle.click();
 
 		// Clear the date.
 		await page.click( '.components-datetime__date-reset-button' );
 
-		const publishDate = await page.$eval(
-			'.edit-post-post-schedule__current-value',
+		const publishDate = await panelToggle.$eval(
+			'.editor-post-publish-panel__link',
 			( publishDateSpan ) => publishDateSpan.textContent
 		);
 

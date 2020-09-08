@@ -1,7 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { Button, Dropdown, PanelRow } from '@wordpress/components';
+import { PanelBody } from '@wordpress/components';
+import { useDispatch, useSelect } from '@wordpress/data';
 import {
 	PostVisibility as PostVisibilityForm,
 	PostVisibilityCheck,
@@ -9,47 +10,58 @@ import {
 } from '@wordpress/editor';
 import { __ } from '@wordpress/i18n';
 
+const PANEL_NAME = 'visibility';
+
 export function PostVisibility() {
+	const { isOpened, isRemoved } = useSelect( ( select ) => {
+		// We use isEditorPanelRemoved to hide the panel if it was
+		// programatically removed. We don't use isEditorPanelEnabled since
+		// this panel should not be disabled through the UI.
+		const { isEditorPanelRemoved, isEditorPanelOpened } = select(
+			'core/edit-post'
+		);
+
+		return {
+			isOpened: isEditorPanelOpened( PANEL_NAME ),
+			isRemoved: isEditorPanelRemoved( PANEL_NAME ),
+		};
+	}, [] );
+
+	const { toggleEditorPanelOpened } = useDispatch( 'core/edit-post' );
+
+	if ( isRemoved ) {
+		return null;
+	}
+
 	return (
-		<PanelRow className="edit-post-post-visibility">
-			<PostVisibilityCheck
-				render={ ( { canEdit } ) => (
-					<>
-						<div>
-							{ __( 'Visibility:' ) }{ ' ' }
-							<span className="edit-post-post-visibility__current-value">
+		<PostVisibilityCheck
+			render={ ( { canEdit } ) => (
+				<PanelBody
+					initialOpen={ false }
+					opened={ isOpened }
+					onToggle={ () => {
+						toggleEditorPanelOpened( PANEL_NAME );
+					} }
+					title={
+						<>
+							{ __( 'Visibility:' ) }
+							<span className="editor-post-publish-panel__link">
 								<PostVisibilityLabel />
 							</span>
-							{ canEdit && (
-								<Dropdown
-									position="bottom left"
-									contentClassName="edit-post-post-visibility__dialog"
-									renderToggle={ ( { isOpen, onToggle } ) => (
-										<Button
-											aria-expanded={ isOpen }
-											onClick={ onToggle }
-											isTertiary
-										>
-											{ __( 'Edit visibility' ) }
-										</Button>
-									) }
-									renderContent={ () => (
-										<PostVisibilityForm />
-									) }
-								/>
+						</>
+					}
+				>
+					{ ! canEdit && (
+						<span>
+							{ __(
+								'You do not have permission to change the visibility.'
 							) }
-						</div>
-						{ ! canEdit && (
-							<p>
-								{ __(
-									'You do not have permission to change the visibility.'
-								) }
-							</p>
-						) }
-					</>
-				) }
-			/>
-		</PanelRow>
+						</span>
+					) }
+					{ canEdit && <PostVisibilityForm /> }
+				</PanelBody>
+			) }
+		/>
 	);
 }
 

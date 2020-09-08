@@ -128,9 +128,11 @@ describe( 'Sidebar', () => {
 		await enableFocusLossObservation();
 		await openDocumentSettingsSidebar();
 
+		expect( await findSidebarPanelWithTitle( 'General' ) ).toBeDefined();
 		expect(
-			await findSidebarPanelWithTitle( 'Status & visibility' )
+			await findSidebarPanelWithTitle( 'Visibility:' )
 		).toBeDefined();
+		expect( await findSidebarPanelWithTitle( 'Publish:' ) ).toBeDefined();
 		expect(
 			await findSidebarPanelWithTitle( 'Post Format' )
 		).toBeDefined();
@@ -146,6 +148,8 @@ describe( 'Sidebar', () => {
 			const { removeEditorPanel } = wp.data.dispatch( 'core/edit-post' );
 
 			removeEditorPanel( 'post-status' );
+			removeEditorPanel( 'visibility' );
+			removeEditorPanel( 'schedule' );
 			removeEditorPanel( 'post-format' );
 			removeEditorPanel( 'taxonomy-panel-category' );
 			removeEditorPanel( 'taxonomy-panel-post_tag' );
@@ -158,9 +162,15 @@ describe( 'Sidebar', () => {
 			return `//div[contains(@class, "edit-post-sidebar")]//button[contains(@class, "components-panel__body-toggle") and contains(text(),"${ panelTitle }")]`;
 		};
 
+		expect( await page.$x( getPanelToggleSelector( 'General' ) ) ).toEqual(
+			[]
+		);
 		expect(
-			await page.$x( getPanelToggleSelector( 'Status & visibility' ) )
+			await page.$x( getPanelToggleSelector( 'Visibility:' ) )
 		).toEqual( [] );
+		expect( await page.$x( getPanelToggleSelector( 'Publish:' ) ) ).toEqual(
+			[]
+		);
 		expect(
 			await page.$x( getPanelToggleSelector( 'Post Format' ) )
 		).toEqual( [] );

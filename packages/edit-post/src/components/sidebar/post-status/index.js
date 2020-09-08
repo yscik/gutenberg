@@ -15,8 +15,6 @@ import PostAuthor from '../post-author';
 import PostSlug from '../post-slug';
 import PostPendingStatus from '../post-pending-status';
 import PluginPostStatusInfo from '../plugin-post-status-info';
-import PostSchedule from '../post-schedule';
-import PostVisibility from '../post-visibility';
 
 /**
  * Module Constants
@@ -27,15 +25,13 @@ function PostStatus( { isOpened, onTogglePanel } ) {
 	return (
 		<PanelBody
 			className="edit-post-post-status"
-			title={ __( 'Status & visibility' ) }
+			title={ __( 'General' ) }
 			opened={ isOpened }
 			onToggle={ onTogglePanel }
 		>
 			<PluginPostStatusInfo.Slot>
 				{ ( fills ) => (
 					<>
-						<PostVisibility />
-						<PostSchedule />
 						<PostSticky />
 						<PostPendingStatus />
 						<PostSlug />
