@@ -43,7 +43,7 @@ export default function PostSchedule() {
 				} }
 				title={
 					<>
-						{ __( 'Publish:' ) }
+						{ __( 'Publish date:' ) }
 						<span className="editor-post-publish-panel__link">
 							<PostScheduleLabel />
 						</span>

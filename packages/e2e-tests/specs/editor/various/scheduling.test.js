@@ -19,7 +19,7 @@ describe( 'Scheduling', () => {
 	};
 
 	it( 'Should keep date time UI focused when the previous and next month buttons are clicked', async () => {
-		await openSidebarPanel( 'Publish:' );
+		await openSidebarPanel( 'Publish date:' );
 		await page.click(
 			'div[aria-label="Move backward to switch to the previous month."]'
 		);

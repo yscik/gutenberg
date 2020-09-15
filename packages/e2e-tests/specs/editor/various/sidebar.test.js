@@ -132,7 +132,9 @@ describe( 'Sidebar', () => {
 		expect(
 			await findSidebarPanelWithTitle( 'Visibility:' )
 		).toBeDefined();
-		expect( await findSidebarPanelWithTitle( 'Publish:' ) ).toBeDefined();
+		expect(
+			await findSidebarPanelWithTitle( 'Publish date:' )
+		).toBeDefined();
 		expect(
 			await findSidebarPanelWithTitle( 'Post Format' )
 		).toBeDefined();
@@ -168,9 +170,9 @@ describe( 'Sidebar', () => {
 		expect(
 			await page.$x( getPanelToggleSelector( 'Visibility:' ) )
 		).toEqual( [] );
-		expect( await page.$x( getPanelToggleSelector( 'Publish:' ) ) ).toEqual(
-			[]
-		);
+		expect(
+			await page.$x( getPanelToggleSelector( 'Publish date:' ) )
+		).toEqual( [] );
 		expect(
 			await page.$x( getPanelToggleSelector( 'Post Format' ) )
 		).toEqual( [] );

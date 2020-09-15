@@ -13,7 +13,7 @@ describe( 'Datepicker', () => {
 
 	it( 'should show the publishing date as "Immediately" if the date is not altered', async () => {
 		const panelToggle = await findSidebarPanelToggleButtonWithTitle(
-			'Publish:'
+			'Publish date:'
 		);
 		const publishDate = await panelToggle.$eval(
 			'.editor-post-publish-panel__link',
@@ -26,7 +26,7 @@ describe( 'Datepicker', () => {
 	it( 'should show the publishing date if the date is in the past', async () => {
 		// Open the datepicker.
 		const panelToggle = await findSidebarPanelToggleButtonWithTitle(
-			'Publish:'
+			'Publish date:'
 		);
 		await panelToggle.click();
 
@@ -50,7 +50,7 @@ describe( 'Datepicker', () => {
 	it( 'should show the publishing date if the date is in the future', async () => {
 		// Open the datepicker.
 		const panelToggle = await findSidebarPanelToggleButtonWithTitle(
-			'Publish:'
+			'Publish date:'
 		);
 		await panelToggle.click();
 
@@ -76,7 +76,7 @@ describe( 'Datepicker', () => {
 	it( 'should show the publishing date as "Immediately" if the date is cleared', async () => {
 		// Open the datepicker.
 		const panelToggle = await findSidebarPanelToggleButtonWithTitle(
-			'Publish:'
+			'Publish date:'
 		);
 		await panelToggle.click();
 

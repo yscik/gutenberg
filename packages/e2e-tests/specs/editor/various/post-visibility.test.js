@@ -46,7 +46,7 @@ describe( 'Post visibility', () => {
 		await openDocumentSettingsSidebar();
 
 		// Set a publish date for the next month.
-		await openSidebarPanel( 'Publish' );
+		await openSidebarPanel( 'Publish date:' );
 		await page.click(
 			'div[aria-label="Move forward to switch to the next month."]'
 		);
