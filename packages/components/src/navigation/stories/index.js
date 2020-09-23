@@ -147,6 +147,11 @@ function Example() {
 						item="child-5"
 						title="Automatic back"
 					/>
+					<NavigationItem
+						navigateToMenu="custom-back-click"
+						item="child-5"
+						title="Custom back click handler"
+					/>
 				</NavigationMenu>
 
 				<NavigationMenu
@@ -185,6 +190,13 @@ function Example() {
 					<NavigationItem item="sub-3-child-1" title="Sub Child 1" />
 					<NavigationItem item="sub-3-child-2" title="Sub Child 2" />
 				</NavigationMenu>
+
+				<NavigationMenu
+					menu="custom-back-click"
+					title="Custom back button click handler"
+					onBackButtonClick={ () => setActiveMenu( 'root' ) }
+					backButtonLabel="Go back to root"
+				/>
 			</Navigation>
 
 			<div style={ { margin: '48px 0 0 24px' } }>
