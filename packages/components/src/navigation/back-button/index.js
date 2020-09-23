@@ -36,10 +36,10 @@ export default function NavigationBackButton( {
 			className={ classes }
 			isTertiary
 			href={ href }
-			onClick={ ( ...args ) =>
+			onClick={
 				parentMenu
-					? setActiveMenu( parentMenu, 'right' )
-					: onClick( ...args )
+					? () => setActiveMenu( parentMenu, 'right' )
+					: onClick
 			}
 		>
 			<Icon icon={ chevronLeft } />
