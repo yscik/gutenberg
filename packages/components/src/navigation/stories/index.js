@@ -16,6 +16,7 @@ import Navigation from '..';
 import NavigationGroup from '../group';
 import NavigationItem from '../item';
 import NavigationMenu from '../menu';
+import { normalizedSearch } from '../utils';
 
 export default {
 	title: 'Components/Navigation',
@@ -29,6 +30,7 @@ const Container = styled.div`
 function Example() {
 	const [ activeItem, setActiveItem ] = useState( 'item-1' );
 	const [ activeMenu, setActiveMenu ] = useState( 'root' );
+	const [ search, setSearch ] = useState( '' );
 
 	const [ delayedBadge, setDelayedBadge ] = useState();
 	useEffect( () => {
@@ -88,6 +90,11 @@ function Example() {
 							title="Navigate to a non existing menu"
 							navigateToMenu="non-existing-menu"
 						/>
+						<NavigationItem
+							item="item-controlled-search"
+							title="Controlled Search Example"
+							navigateToMenu="controlled-search"
+						/>
 					</NavigationGroup>
 					<NavigationGroup title="Group 2">
 						<NavigationItem
@@ -117,7 +124,6 @@ function Example() {
 
 				<NavigationMenu
 					backButtonLabel="Home"
-					hasSearch
 					menu="category"
 					parentMenu="root"
 					title="Category"
@@ -185,6 +191,32 @@ function Example() {
 				>
 					<NavigationItem item="sub-3-child-1" title="Sub Child 1" />
 					<NavigationItem item="sub-3-child-2" title="Sub Child 2" />
+				</NavigationMenu>
+
+				<NavigationMenu
+					hasSearch
+					menu="controlled-search"
+					onSearch={ ( value ) => setSearch( value ) }
+					parentMenu="root"
+					search={ search }
+					title="Controlled Search"
+				>
+					{ [
+						{ item: 'search-item-1', title: 'Foo' },
+						{ item: 'search-item-2', title: 'Bar' },
+						{ item: 'search-item-3', title: 'Baz' },
+						{ item: 'search-item-4', title: 'Qux' },
+					]
+						.filter( ( { title } ) =>
+							normalizedSearch( title, search )
+						)
+						.map( ( { item, title } ) => (
+							<NavigationItem
+								key={ item }
+								item={ item }
+								title={ title }
+							/>
+						) ) }
 				</NavigationMenu>
 			</Navigation>
 
