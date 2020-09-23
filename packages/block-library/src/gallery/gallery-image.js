@@ -213,6 +213,7 @@ class GalleryImage extends Component {
 					tabIndex="0"
 					aria-label={ ariaLabel }
 					ref={ this.bindContainer }
+					aria-describedby={ 'caption-' + id }
 				/>
 				{ isBlobURL( url ) && <Spinner /> }
 			</>
@@ -225,8 +226,18 @@ class GalleryImage extends Component {
 		} );
 
 		return (
-			<figure className={ className } aria-describedby={ 'caption-' + id }>
-				{ ! isEditing && ( href ? <a href={ href } title={ caption }>{ img }</a> : img ) }
+			<figure
+				className={ className }
+				aria-describedby={ 'caption-' + id }
+			>
+				{ ! isEditing &&
+					( href ? (
+						<a href={ href }>
+							{ img }
+						</a>
+					) : (
+						img
+					) ) }
 				{ isEditing && (
 					<MediaPlaceholder
 						labels={ { title: __( 'Edit gallery image' ) } }

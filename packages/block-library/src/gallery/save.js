@@ -46,7 +46,7 @@ export default function save( { attributes } ) {
 							className={
 								image.id ? `wp-image-${ image.id }` : null
 							}
-							aria-label={ image.caption }
+							aria-describedby={ 'caption-' + image.id }
 						/>
 					);
 
@@ -56,7 +56,13 @@ export default function save( { attributes } ) {
 							className="blocks-gallery-item"
 						>
 							<figure aria-describedby={ 'caption-' + image.id }>
-								{ href ? <a href={ href } title={ image.caption }>{ img }</a> : img }
+								{ href ? (
+									<a href={ href }>
+										{ img }
+									</a>
+								) : (
+									img
+								) }
 								{ ! RichText.isEmpty( image.caption ) && (
 									<RichText.Content
 										tagName="figcaption"
