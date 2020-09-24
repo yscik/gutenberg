@@ -10,13 +10,28 @@ import {
 } from '@wordpress/components';
 import { getBlockType, getBlockFromExample } from '@wordpress/blocks';
 import { BlockPreview } from '@wordpress/block-editor';
+import { useDispatch, useSelect } from '@wordpress/data';
+
+/**
+ * Internal dependencies
+ */
+import PageSwitcher from './page-switcher';
 
 const NavigationPanel = () => {
 	const [ showPreview, setShowPreview ] = useState( false );
+	const page = useSelect(
+		( select ) => select( 'core/edit-site' ).getPage(),
+		[]
+	);
+	const { setPage } = useDispatch( 'core/edit-site' );
+
+	const changePage = ( newPage ) => {
+		setPage( newPage );
+	};
 
 	return (
 		<div className="edit-site-navigation-panel">
-			<Navigation>
+			<Navigation activeItem={ page && page.path }>
 				<NavigationMenu title="Home">
 					<NavigationItem
 						item="item-back"
@@ -32,6 +47,8 @@ const NavigationPanel = () => {
 							onMouseLeave={ () => setShowPreview( false ) }
 						/>
 					</NavigationGroup>
+
+					<PageSwitcher onChangePage={ changePage } />
 				</NavigationMenu>
 			</Navigation>
 
