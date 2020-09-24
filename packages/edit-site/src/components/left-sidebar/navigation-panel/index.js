@@ -42,7 +42,12 @@ const NavigationPanel = () => {
 
 	return (
 		<div className="edit-site-navigation-panel">
-			<Navigation>
+			<Navigation
+				activeItem={
+					templateType === 'wp_template_part' &&
+					`template-part-${ templatePartId }`
+				}
+			>
 				<NavigationMenu title="Home">
 					<NavigationItem
 						item="item-back"
@@ -53,8 +58,6 @@ const NavigationPanel = () => {
 					<TemplateSwitcher
 						page={ page }
 						activeId={ templateId }
-						activeTemplatePartId={ templatePartId }
-						isTemplatePart={ templateType === 'wp_template_part' }
 						onActiveIdChange={ setTemplate }
 						onActiveTemplatePartIdChange={ setTemplatePart }
 						onAddTemplate={ addTemplate }
